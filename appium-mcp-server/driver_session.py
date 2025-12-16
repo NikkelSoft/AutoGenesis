@@ -16,14 +16,96 @@ logger = get_mcp_logger()
 
 def _log_session_failure_diagnostics(session_id, error_message):
     """Log diagnostic information when session failure occurs"""
-    #@jingping
-    pass
+    try:
+        logger.error(f"🚨 SESSION FAILURE DIAGNOSTICS for session {session_id}")
+        logger.error(f"🚨 Error: {error_message}")
+        logger.error(f"🚨 Time: {datetime.now().isoformat()}")
+        
+        # 1. 检查 WebDriverAgent 进程
+        try:
+            result = subprocess.run(["ps", "aux"], capture_output=True, text=True, check=False)
+            wda_lines = [line for line in result.stdout.split('\n') if 'webdriver' in line.lower()]
+            if wda_lines:
+                logger.error(f"🚨 WebDriverAgent processes ({len(wda_lines)}):")
+                for line in wda_lines[:5]:  # 只显示前5个
+                    logger.error(f"🚨   {line.strip()}")
+            else:
+                logger.error("🚨 No WebDriverAgent processes found")
+        except Exception as e:
+            logger.error(f"🚨 Failed to check processes: {e}")
+        
+        # 2. 检查端口占用
+        critical_ports = [4723, 10100]
+        for port in critical_ports:
+            try:
+                result = subprocess.run(["lsof", "-ti", f":{port}"], 
+                                      capture_output=True, text=True, check=False)
+                if result.stdout.strip():
+                    logger.error(f"🚨 Port {port}: occupied by PIDs {result.stdout.strip()}")
+                else:
+                    logger.error(f"🚨 Port {port}: free")
+            except Exception as e:
+                logger.error(f"🚨 Failed to check port {port}: {e}")
+        
+        # 3. 检查内存使用（简单版本）
+        try:
+            result = subprocess.run(["vm_stat"], capture_output=True, text=True, check=False)
+            if result.returncode == 0:
+                for line in result.stdout.split('\n')[:3]:  # 只显示前3行
+                    if line.strip():
+                        logger.error(f"🚨 Memory: {line.strip()}")
+        except Exception as e:
+            logger.error(f"🚨 Failed to check memory: {e}")
+        
+        # 4. 检查系统负载
+        try:
+            result = subprocess.run(["uptime"], capture_output=True, text=True, check=False)
+            if result.returncode == 0:
+                logger.error(f"🚨 System load: {result.stdout.strip()}")
+        except Exception as e:
+            logger.error(f"🚨 Failed to check system load: {e}")
+        
+        logger.error("🚨 END SESSION FAILURE DIAGNOSTICS")
+        
+    except Exception as e:
+        logger.error(f"🚨 Failed to run diagnostics: {e}")
 
 
 def _cleanup_mac_webdriver_processes():
     """Forcefully cleanup any lingering WebDriverAgent processes on Mac"""
-   # @jingping
-    pass
+    try:
+        # Kill WebDriverAgentRunner processes
+        logger.info("Cleaning up WebDriverAgentRunner processes...")
+        subprocess.run(["pkill", "-f", "WebDriverAgentRunner"], capture_output=True, check=False)
+
+        # Kill any lingering WebDriverAgent-related processes
+        subprocess.run(["pkill", "-f", "WebDriverAgent"], capture_output=True, check=False)
+
+        # Kill any processes listening on common Mac2 driver ports
+        for port in [8100, 8101, 8102, 8103]:
+            try:
+                # Find and kill processes using these ports
+                result = subprocess.run(
+                    ["lsof", "-ti", f":{port}"],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                if result.stdout.strip():
+                    pids = result.stdout.strip().split("\n")
+                    for pid in pids:
+                        if pid:
+                            subprocess.run(["kill", "-9", pid], capture_output=True, check=False)
+                            logger.info(f"Killed process {pid} using port {port}")
+            except Exception as e:
+                logger.debug(f"Error cleaning up port {port}: {e}")
+
+        # Give a moment for cleanup to complete
+        time.sleep(0.5)
+        logger.info("Mac WebDriverAgent process cleanup completed")
+
+    except Exception as e:
+        logger.warning(f"Error during Mac process cleanup: {e}")
 
 
 class DriverSessionManager:
@@ -85,8 +167,8 @@ class DriverSessionManager:
 
         # For Mac platform, perform forcefully cleanup any lingering WebDriverAgent processes
         if self.device == "mac":
-           # @jingping
-           return None
+            logger.info("Mac platform: performing process cleanup and session close before new session")
+            _cleanup_mac_webdriver_processes()
 
         if self._driver and self._is_session_valid():
             logger.info("Driver session already exists and is valid, reusing it.")
