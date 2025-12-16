@@ -54,3 +54,9 @@ data/processed/
 *.bak
 *.swp
 .cache/
+
+# Extension
+bdd_ai_toolkit/out/*
+bdd_ai_toolkit/node_modules/*
+bdd_ai_toolkit/package-lock.json
+bdd_ai_toolkit/*.vsix

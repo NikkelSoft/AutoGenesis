@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- AI Robot head - even larger, nearly full canvas -->
+  <rect x="2" y="5" width="20" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.1"/>
+  <!-- Eyes - positioned for even bigger head -->
+  <circle cx="7" cy="11" r="2" fill="currentColor"/>
+  <circle cx="17" cy="11" r="2" fill="currentColor"/>
+  <!-- Eye highlights for character -->
+  <circle cx="7.5" cy="10.5" r="0.6" fill="white"/>
+  <circle cx="17.5" cy="10.5" r="0.6" fill="white"/>
+  <!-- Mouth - even wider for bigger head -->
+  <path d="M7.5 15h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Antenna - positioned for bigger head -->
+  <path d="M12 5V1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="12" cy="1" r="1.5" fill="currentColor"/>
+  <!-- Body indicators - longer legs for bigger robot -->
+  <path d="M6.5 19v4M17.5 19v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Side panels - bigger ears for bigger head -->
+  <rect x="0.5" y="8" width="2.5" height="7" rx="1" fill="currentColor"/>
+  <rect x="21" y="8" width="2.5" height="7" rx="1" fill="currentColor"/>
+</svg>
