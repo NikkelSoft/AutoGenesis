@@ -329,16 +329,6 @@ def gen_code_preview(browser_manager) -> dict:
     
     return {'diff_preview': diff_preview, 'new_steps_code': new_steps_code}
 
-def gen_code_preview_test(gen_code_id, gen_code_cache) -> str:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from browser_session import BrowserSessionManager
-    browser_manager = BrowserSessionManager('edge-beta')
-    browser_manager.gen_code_id = gen_code_id
-    browser_manager.gen_code_cache = gen_code_cache
-    browser_manager.steps_dir = STEPS_DIR_DEFAULT
-    browser_manager.step_file_target = TARGET_STEP_FILE_DEFAULT
-    return gen_code_preview(browser_manager)
-
 
 def ensure_step_path_exists(step_file: str) -> bool:
     step_path = Path(step_file)
@@ -407,7 +397,7 @@ def log_params(func, *args, **kwargs):
     for k, v in kwargs.items():
         tool_params[k] = v
     
-    tool_params['need_snapshot'] = 0
+    # tool_params['need_snapshot'] = 0
     return tool_params
 
 
