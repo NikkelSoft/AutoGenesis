@@ -46,7 +46,20 @@ How to Evaluate & Examples:
   - https://aka.ms/StartRight/README-Template/Instructions#description
 -->
 
-AutoGenesis is a cross-platform client automation solution that leverages AI to automatically generate test code, significantly reducing manual effort . It supports Windows, macOS, iOS, and Android.
+AutoGenesis is a cross-platform client automation solution that leverages AI to automatically generate test code, significantly reducing manual effort. It supports Windows, macOS, iOS, and Android.
+
+This project combines BDD (Behavior-Driven Development) testing with AI assistance powered by GitHub Copilot to streamline the test automation process. It includes:
+- **appium-mcp-server**: MCP (Model Context Protocol) server for mobile and desktop automation
+- **bdd_ai_toolkit**: VS Code extension for AI-powered test recording
+- **behave-demo**: Sample BDD test cases using Behave framework
+
+## Features
+
+- 🤖 AI-powered test script generation using GitHub Copilot
+- 📝 Natural language test case writing
+- 🔄 Automatic step definition generation
+- 🎯 BDD test case validation and best practices
+- 📱 Multi-platform support (Windows, macOS, iOS, Android)
 
 -----------------------------------------------------------------
 <!-----------------------[  License  ]----------------------<optional> section below--------------------->
@@ -85,9 +98,25 @@ How to Evaluate & Examples:
   - https://aka.ms/StartRight/README-Template/Instructions#getting-started
 -->
 
-<!---- [TODO]  CONTENT GOES BELOW ------->
-*Description of how to install and use the code or content goes here*
-<!------====-- CONTENT GOES ABOVE ------->
+### Clone the Repository
+
+Open PowerShell and run:
+
+    git clone https://github.com/ai-microsoft/AutoGenesis.git
+    cd AutoGenesis
+
+### Setup MCP Server
+
+1. Click "Setup MCP Server" in the BDD AI Toolkit panel
+2. Wait for the setup to complete (~1 minute)
+3. Click "Start" to start the server
+4. Verify the server status shows "Running" and MCP tools are listed
+
+### Enable Auto-Approve (Optional)
+
+For a smoother experience, enable auto-approve for MCP tools by pasting this link in your browser:
+
+    vscode://settings/chat.tools.autoApprove
 
 
 <!-----------------------[ Prerequisites  ]-----------------<optional> section below--------------------->
@@ -101,9 +130,11 @@ How to Evaluate & Examples:
   - https://aka.ms/StartRight/README-Template/Instructions#prerequisites
 ---------------------------------------------------------->
 
-<!---- [TODO]  CONTENT GOES BELOW ------->
-There are no prerequisites required to run this code or use this repository.
-<!------====-- CONTENT GOES ABOVE ------->
+- Visual Studio Code
+- GitHub Copilot subscription
+- Python 3.10 or higher
+- Node.js and npm
+- Microsoft Edge (Stable, Beta, or Canary)
 
 
 <!-----------------------[  Installing  ]-------------------<optional> section below------------------>
@@ -116,16 +147,163 @@ INSTRUCTIONS:
 
 How to Evaluate & Examples:
   - https://aka.ms/StartRight/README-Template/Instructions#installing
+-->
 
-<!---- [TODO]  CONTENT GOES BELOW ------->
-This repository does not hold installable content.
-<!------====-- CONTENT GOES ABOVE ------->
+#### 1. Install Required Tools
+
+**Visual Studio Code**
+- Download: https://code.visualstudio.com/
+
+**GitHub Copilot**
+- Install the GitHub Copilot extension from VS Code Extensions Marketplace
+- Sign in with your GitHub account
+- Guide: https://docs.github.com/en/copilot
+
+#### 2. Install VS Code Extensions
+
+Required extensions:
+- **BDD AI Toolkit** - For recording automation test scripts
+- **Cucumber (Gherkin) Full Support** - For BDD syntax highlighting
+
+Steps:
+1. Open VS Code
+2. Press `Ctrl+Shift+X` to open Extensions view
+3. Search and install both extensions
+
+#### 3. Setup Environment
+
+1. Click the BDD AI Toolkit button in the left panel
+2. Check your environment status
+3. Install NPM and Python (>3.10) manually if needed
+4. Click "Auto-resolve" to install VS Code CLI and UV tool automatically
+
+#### 4. Install Microsoft Edge
+
+Download: https://microsoft.com/en-us/edge/download/insider?form=MA13FJ
 
 
 <!-----------------------[  Tests  ]------------------------<optional> section below--------------------->
-<!-- 
-## Tests
- -->
+
+## Usage
+
+### Writing Tests with Natural Language
+
+1. **Select Agent Mode** in GitHub Copilot Chat
+2. **Choose Claude Sonnet 4** as your model
+3. **Send a natural language task** using `#sendNaturalLanguageTask <your task>`
+
+Example:
+
+    #sendNaturalLanguageTask Test msn.com website on Edge browser
+
+### Recording Test Scripts
+
+Use the following prompt template in Copilot Chat:
+
+    Please use win-auto-mcp to execute the following instructions:
+
+    # Original BDD Test Case (strictly follow step-by-step):
+    Scenario: Download PDF file
+    Given Edge is launched
+        When I navigate to "https://getsamplefiles.com/download/pdf/sample-1.pdf"
+        Then the Downloads pane should appear
+        When I navigate to "edge://downloads"
+        Then "sample-1.pdf" should appear in download list
+        
+    Requirements:
+    feature_file = c:\Users\yuexiong\projects\AutoGenesis\behave-demo\features\demo.feature
+    1. Before executing the first step, call `before_gen_code`, and after all steps are completed, sequentially call `preview_code_changes` and `confirm_code_change`.
+    2. Execute **each step** exactly as written, in order. Do not lose bdd step keyword.
+    3. **Do not modify, merge, skip, or add any step.**
+    4. Use **only** win-auto-mcp API calls.
+    5. Do not close browser
+
+### Running Tests
+
+**Option 1: Run from Copilot Extension**
+- Use the run button in the BDD AI Toolkit panel
+
+**Option 2: Run via Command Line**
+
+    cd behave-demo
+    uv run behave --name "Test msn.com website on Edge"
+
+## Writing Good BDD Test Cases
+
+### ✅ Good Example
+
+    Scenario: Sort favorites alphabetically Z to A
+      Given I have favorites "Microsoft", "Bing", and "GitHub" in my Favorites bar
+      When I click the Favorites icon in the toolbar
+      And I click the "Sort favorites" button
+      And I select "Z to A" from the sort options menu
+      Then the favorites should be sorted as "Microsoft", "GitHub", "Bing"
+      And the "Z to A" option should be checked in the sort options menu
+
+**Why this is good:**
+- Concrete, specific actions with explicit content
+- Focuses on one functionality
+- Concise Given statement
+- Verifies functional results
+- Uses explicit names
+
+### ❌ Bad Example
+
+    Scenario: Sort favorites using different methods
+      Given the Favorites flyout is open
+      When the user clicks the "Sort favorites" button
+      And the user selects "Frequently visited" in the options menu
+      Then the sort button icon should change
+      # ... multiple similar steps
+
+**Why this is bad:**
+- Multiple functionalities in one scenario
+- Uses third-person perspective
+- Focuses on UI changes instead of functional behavior
+- No verification of actual sorting
+- Repetitive patterns
+
+## Project Structure
+
+    AutoGenesis/
+    ├── appium-mcp-server/       # MCP server for automation
+    │   ├── tools/               # Platform-specific driver tools
+    │   ├── llm/                 # LLM integration
+    │   └── utils/               # Utilities
+    ├── bdd_ai_toolkit/          # VS Code extension
+    │   ├── src/                 # Extension source code
+    │   └── resources/           # UI resources
+    └── behave-demo/             # Sample BDD tests
+        └── features/            # Feature files and step definitions
+
+## Configuration
+
+### Appium Configuration
+
+Edit `appium-mcp-server/conf/appium_conf.json` to configure Appium settings.
+
+### Azure GPT (Optional)
+
+Configure Azure GPT deployment in the MCP server settings to enable screenshot analysis.
+
+## Troubleshooting
+
+- Ensure Python version is 3.10 or higher
+- Verify MCP server status is "Running"
+- Check that all required VS Code extensions are installed
+- Enable auto-approve for smoother MCP tool execution
+
+## Feedback
+
+For questions or feedback, please contact: fsqgroup@microsoft.com
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+## License
+
+See [LICENSE](LICENSE) for license information.
 
 <!--
 INSTRUCTIONS:
