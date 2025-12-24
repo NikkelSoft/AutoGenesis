@@ -1,0 +1,8 @@
+{
+    "app_conf": {
+        "app_name": "",
+        "exe": "",
+        "window_title_re": "",
+        "launch_args": []
+    }
+}
