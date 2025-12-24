@@ -494,8 +494,6 @@ def register_verify_tools(mcp, app_manager):
         Returns:
             str: JSON response with status, verification result, reason, and error (if any)
 
-        Note:
-            - Automatically captures PNG screenshot from main window
         """
         resp = init_tool_response()
         try:
