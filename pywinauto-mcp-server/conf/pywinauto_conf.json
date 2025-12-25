@@ -1,5 +1,5 @@
 {
-    "app_conf": {
+    "PYWINAUTO_CONFIG": {
         "app_name": "",
         "exe": "",
         "window_title_re": "",

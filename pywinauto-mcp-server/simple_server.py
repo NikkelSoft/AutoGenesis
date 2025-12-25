@@ -15,11 +15,11 @@ from tools.gen_code_tool import register_gen_code_tools
 from tools.mouse_tool import register_mouse_tools
 from tools.verify_tool import register_verify_tools
 
-settings = {"log_level": "DEBUG"}
+
 logger = logging.getLogger(__name__)
 
 # Create MCP server
-mcp = FastMCP("hello-mcp-server", log_level="INFO", settings=settings)
+mcp = FastMCP("hello-mcp-server", log_level="INFO")
 app_manager = None
 
 
@@ -28,7 +28,7 @@ def load_app_config(file_path=None):
     if file_path is not None:
         app_conf_path = Path(file_path)
     else:
-        app_conf_path = Path(__file__).parent / "conf" / "app_conf.json"
+        app_conf_path = Path(__file__).parent / "conf" / "pywinauto_conf.json"
 
     if not app_conf_path.exists():
         logger.error(f"App configuration file not found: {app_conf_path}")  
@@ -37,7 +37,7 @@ def load_app_config(file_path=None):
     with open(app_conf_path, 'r', encoding='utf-8') as f:
         app_conf = json.load(f)
 
-    return app_conf.get("app_conf", {})
+    return app_conf.get("PYWINAUTO_CONFIG", {})
 
 async def main():
     global app_manager
