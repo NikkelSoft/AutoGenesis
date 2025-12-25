@@ -19,7 +19,7 @@ from tools.verify_tool import register_verify_tools
 logger = logging.getLogger(__name__)
 
 # Create MCP server
-mcp = FastMCP("hello-mcp-server", log_level="INFO")
+mcp = FastMCP("pywinauto-mcp-server", log_level="INFO")
 app_manager = None
 
 
