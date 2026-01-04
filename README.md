@@ -61,14 +61,10 @@ Please refer to the appropriate documentation based on your testing platform:
 
 ### 📱 Mobile Testing (iOS/Android)
 
-For mobile application testing using Appium, please see:
-**[Mobile Testing Guide - MOBILE-README.md](MOBILE-README.md)**
-
 **Features:**
 - iOS and Android app automation
 - BrowserStack cloud testing integration
 - AI-assisted test script generation
-- Natural language test case writing
 
 **Get Started:**
 - See [MOBILE-README.md](MOBILE-README.md) for detailed setup instructions
@@ -78,13 +74,6 @@ For mobile application testing using Appium, please see:
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Mobile Testing Setup](MOBILE-README.md)
 - [License](LICENSE)
-
-## Getting Started
-
-1. Choose your testing platform from the links above
-2. Follow the platform-specific setup guide
-3. Start writing test cases in natural language
-4. Let AI generate the automation code
 
 ## Project Structure
 
