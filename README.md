@@ -35,8 +35,16 @@ AutoGenesis is an AI-powered automated testing framework based on Model Context 
 
 Please refer to the appropriate documentation based on your testing platform:
 
+<<<<<<< HEAD
 ### 💻 Windows Testing
 **Coming soon** - Windows desktop application testing documentation
+=======
+This project combines BDD (Behavior-Driven Development) testing with AI assistance powered by GitHub Copilot to streamline the test automation process. It includes:
+- **appium-mcp-server**: MCP (Model Context Protocol) server for mobile and desktop automation
+- **pywinauto-mcp-server**: MCP server for Windows desktop application automation using pywinauto
+- **bdd_ai_toolkit**: VS Code extension for AI-powered test recording
+- **behave-demo**: Sample BDD test cases using Behave framework
+>>>>>>> 6aea0ffb8e8a2fab6c6a0c95c815abbb5586eb6a
 
 Features:
 - Windows desktop app automation
