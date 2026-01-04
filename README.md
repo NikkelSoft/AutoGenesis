@@ -35,54 +35,49 @@ AutoGenesis is an AI-powered automated testing framework based on Model Context 
 
 Please refer to the appropriate documentation based on your testing platform:
 
-<<<<<<< HEAD
 ### 💻 Windows Testing
-**Coming soon** - Windows desktop application testing documentation
-=======
-This project combines BDD (Behavior-Driven Development) testing with AI assistance powered by GitHub Copilot to streamline the test automation process. It includes:
-- **appium-mcp-server**: MCP (Model Context Protocol) server for mobile and desktop automation
-- **pywinauto-mcp-server**: MCP server for Windows desktop application automation using pywinauto
-- **bdd_ai_toolkit**: VS Code extension for AI-powered test recording
-- **behave-demo**: Sample BDD test cases using Behave framework
->>>>>>> 6aea0ffb8e8a2fab6c6a0c95c815abbb5586eb6a
 
-Features:
+**Coming soon** - Windows desktop application testing documentation
+
+**Features:**
 - Windows desktop app automation
 - Native Windows control support
 - AI-assisted test script generation
 
+**Get Started:**
+- Documentation coming soon
+
 ### 🍎 macOS Testing
+
 **Coming soon** - macOS desktop application testing documentation
 
-Features:
+**Features:**
 - macOS desktop app automation
 - Native macOS control support
 - AI-assisted test script generation
 
+**Get Started:**
+- Documentation coming soon
+
 ### 📱 Mobile Testing (iOS/Android)
+
 For mobile application testing using Appium, please see:
 **[Mobile Testing Guide - MOBILE-README.md](MOBILE-README.md)**
 
-Features:
+**Features:**
 - iOS and Android app automation
 - BrowserStack cloud testing integration
 - AI-assisted test script generation
 - Natural language test case writing
+
+**Get Started:**
+- See [MOBILE-README.md](MOBILE-README.md) for detailed setup instructions
 
 ## Quick Links
 
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Mobile Testing Setup](MOBILE-README.md)
 - [License](LICENSE)
-
-## Overview
-
-AutoGenesis leverages the Model Context Protocol (MCP) to provide:
-
-- **AI-Assisted Test Generation**: Generate test scripts through natural language descriptions
-- **Multi-Platform Support**: Unified framework for Windows, macOS, and mobile testing
-- **BDD Format**: Automatic generation of Behavior-Driven Development test cases
-- **IDE Integration**: Works with VS Code, Cursor, and other AI-powered editors
 
 ## Getting Started
 
