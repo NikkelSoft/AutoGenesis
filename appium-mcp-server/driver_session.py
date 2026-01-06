@@ -4,6 +4,7 @@ import time
 import logging
 import subprocess
 import os
+import threading
 from datetime import datetime
 from appium import webdriver
 from appium.options.ios import XCUITestOptions
@@ -12,47 +13,6 @@ from appium.options.android import UiAutomator2Options  # Add this for Android i
 from utils.logger import get_mcp_logger
 
 logger = get_mcp_logger()
-
-
-def _cleanup_mac_webdriver_processes():
-    """Forcefully cleanup any lingering WebDriverAgent processes on Mac"""
-    try:
-        # Force kill Edge processes to prevent "Leave site?" dialogs from blocking cleanup
-        logger.info("Cleaning up Microsoft Edge processes...")
-        subprocess.run(["pkill", "-9", "-f", "Microsoft Edge"], capture_output=True, check=False)
-        
-        # Kill WebDriverAgentRunner processes
-        logger.info("Cleaning up WebDriverAgentRunner processes...")
-        subprocess.run(["pkill", "-f", "WebDriverAgentRunner"], capture_output=True, check=False)
-
-        # Kill any lingering WebDriverAgent-related processes
-        subprocess.run(["pkill", "-f", "WebDriverAgent"], capture_output=True, check=False)
-
-        # Kill any processes listening on common Mac2 driver ports
-        for port in [8100, 8101, 8102, 8103]:
-            try:
-                # Find and kill processes using these ports
-                result = subprocess.run(
-                    ["lsof", "-ti", f":{port}"],
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                )
-                if result.stdout.strip():
-                    pids = result.stdout.strip().split("\n")
-                    for pid in pids:
-                        if pid:
-                            subprocess.run(["kill", "-9", pid], capture_output=True, check=False)
-                            logger.info(f"Killed process {pid} using port {port}")
-            except Exception as e:
-                logger.debug(f"Error cleaning up port {port}: {e}")
-
-        # Give a moment for cleanup to complete
-        time.sleep(0.5)
-        logger.info("Mac WebDriverAgent process cleanup completed")
-
-    except Exception as e:
-        logger.warning(f"Error during Mac process cleanup: {e}")
 
 
 class DriverSessionManager:
@@ -96,10 +56,9 @@ class DriverSessionManager:
         if kill_existing == 1:
             self.app_close()
 
-        # For Mac platform, perform forcefully cleanup any lingering WebDriverAgent processes
-        if self.device == "mac":
-            logger.info("Mac platform: performing process cleanup and session close before new session")
-            _cleanup_mac_webdriver_processes()
+        if self.device == "mac" and self._driver and self._is_session_valid():
+            logger.info("Mac platform: closing existing session before new session")
+            self.session_close()
 
         if self._driver and self._is_session_valid():
             logger.info("Driver session already exists and is valid, reusing it.")
@@ -167,10 +126,10 @@ class DriverSessionManager:
             package = self.config.get("appPackage")
         else:
             package = None
-        
+
         if package:
             return package
-        
+
         # Priority 2: From capabilities (fallback for compatibility)
         if self._driver:
             caps = self._driver.capabilities
@@ -178,12 +137,11 @@ class DriverSessionManager:
                     caps.get("appium:bundleId") or 
                     caps.get("appPackage") or 
                     caps.get("appium:appPackage"))
-        
+
         return None
 
     def app_close(self):
         if self._driver and self._is_session_valid():
-            logger.info("Closing app session")
             package = self.app_package()
             if package and self.device in ["ios", "android"]:
                 # For iOS and Android, terminate the app using bundle ID
@@ -192,11 +150,57 @@ class DriverSessionManager:
         else:
             logger.warning("No app to close or driver session is invalid.")
 
+    def _force_kill_mac_app(self, package):
+        """Force kill a Mac app by bundle ID using osascript and kill -9"""
+        try:
+            logger.info(f"Force killing {package} using osascript/kill")
+            cmd = ['osascript', '-e', f'tell application "System Events" to unix id of processes whose bundle identifier is "{package}"']
+            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+            if result.returncode == 0 and result.stdout.strip():
+                pids = result.stdout.strip().split(',')
+                for pid in pids:
+                    pid = pid.strip()
+                    if pid.isdigit():
+                        logger.info(f"Killing PID {pid}")
+                        subprocess.run(['kill', '-9', pid], check=False)
+            else:
+                logger.info(f"No running processes found for {package}")
+        except Exception as e:
+            logger.warning(f"Failed to force kill app: {e}")
+
     def session_close(self):
         """Close the current driver session"""
         if self._driver and self._is_session_valid():
             logger.info("Closing driver session")
-            self._driver.quit()
+            
+            if self.device == "mac":
+                package = self.app_package()
+                
+                # Define a wrapper for quit to run in a thread
+                def quit_driver():
+                    try:
+                        if self._driver:
+                            self._driver.quit()
+                    except Exception as e:
+                        logger.warning(f"Error during driver quit: {e}")
+
+                # Run quit in a thread with timeout
+                quit_thread = threading.Thread(target=quit_driver)
+                quit_thread.start()
+                quit_thread.join(timeout=5)  # Wait for 5 seconds
+                
+                if quit_thread.is_alive():
+                    logger.warning("Driver quit timed out (likely stuck on dialog), forcing app kill")
+                    if package:
+                        self._force_kill_mac_app(package)
+                    # Since we forced killed the app, the session is likely broken/gone.
+                    # We don't need to wait for the thread anymore.
+            else:
+                try:
+                    self._driver.quit()
+                except Exception as e:
+                    logger.warning(f"Error during driver quit: {e}")
+            
             self._driver = None
         else:
             logger.warning("No valid driver session to close.")
