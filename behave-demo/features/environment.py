@@ -260,7 +260,7 @@ def after_step(context, step):
         context.telemetry_client.track_metric(
             "TestStepExecuted", 1,
             properties={
-                "Platform": "Android", 
+                "Platform": "", 
                 "Status": 'Passed' if step.status == 'passed' else 'Failed',
                 "RunSource": "OpenResource"
                 }
