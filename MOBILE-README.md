@@ -146,11 +146,20 @@ Create or edit `.vscode/settings.json` in your project root:
     # Add MCP server configuration to .vscode/settings.json:
     # {
     #   "github.copilot.chat.mcp.servers": {
-    #     "appium-mcp": {
-    #       "command": "python",
-    #       "args": ["c:/Users/yuexiong/projects/AutoGenesis/appium-mcp-server/simple_server.py"],
+    #     "appium-mcp-server-stdio": {
+    #       "command": "c:\\Users\\username\\projects\\AutoGenesis\\.venv\\Scripts\\python.exe",
+    #       "args": [
+    #         "c:\\Users\\username\\projects\\AutoGenesis\\appium-mcp-server\\simple_server.py",
+    #         "--transport",
+    #         "stdio",
+    #         "--platform",
+    #         "ios"
+    #       ],
     #       "env": {
-    #         "PYTHONPATH": "c:/Users/yuexiong/projects/AutoGenesis/appium-mcp-server"
+    #         "PYTHONIOENCODING": "utf-8",
+    #         "PYTHONUTF8": "1",
+    #         "LANG": "en_US.UTF-8",
+    #         "LC_ALL": "en_US.UTF-8"
     #       }
     #     }
     #   }
@@ -159,7 +168,10 @@ Create or edit `.vscode/settings.json` in your project root:
 **Note:** 
 - stdio mode: VS Code automatically starts and manages the MCP server process, suitable for local development
 - SSE mode: Requires manual start of MCP server (`python simple_server.py --transport sse`), suitable for remote servers or multi-client scenarios
-- Please replace the path with your actual project path
+- Use virtual environment Python path (`.venv\\Scripts\\python.exe`) for better dependency isolation
+- `--platform` parameter: specify `ios` or `android` based on your testing needs
+- Environment variables ensure proper UTF-8 encoding for international character support
+- Please replace the paths with your actual project paths
 
 #### 5.2 Cursor Configuration
 
@@ -181,9 +193,21 @@ Configure MCP server in Cursor settings:
     # Add to Cursor MCP configuration:
     # {
     #   "mcpServers": {
-    #     "appium-mcp": {
-    #       "command": "python",
-    #       "args": ["c:/Users/yuexiong/projects/AutoGenesis/appium-mcp-server/simple_server.py"]
+    #     "appium-mcp-server-stdio": {
+    #       "command": "c:\\Users\\username\\projects\\AutoGenesis\\.venv\\Scripts\\python.exe",
+    #       "args": [
+    #         "c:\\Users\\username\\projects\\AutoGenesis\\appium-mcp-server\\simple_server.py",
+    #         "--transport",
+    #         "stdio",
+    #         "--platform",
+    #         "ios"
+    #       ],
+    #       "env": {
+    #         "PYTHONIOENCODING": "utf-8",
+    #         "PYTHONUTF8": "1",
+    #         "LANG": "en_US.UTF-8",
+    #         "LC_ALL": "en_US.UTF-8"
+    #       }
     #     }
     #   }
     # }
@@ -191,7 +215,10 @@ Configure MCP server in Cursor settings:
 **Note:**
 - SSE mode: Need to manually start the server first (`python simple_server.py --platform android`, uses SSE by default), then Cursor connects via HTTP
 - stdio mode: Cursor automatically starts and manages the server process
-- Please replace the path with your actual project path
+- Use virtual environment Python path (`.venv\\Scripts\\python.exe`) for better dependency isolation
+- `--platform` parameter: specify `ios` or `android` based on your testing needs
+- Environment variables ensure proper UTF-8 encoding for international character support
+- Please replace the paths with your actual project paths
 
 ### 6. Use MCP to Generate Test Code
 
@@ -231,7 +258,9 @@ Please use appium-mcp-server to execute the following instructions:
 Requirements: 
 1. Before executing the first step, call clear_cache, and after all steps are completed, sequentially call preview_code_changes and confirm_code_change. 
 2. Execute each step exactly as written, in order. Each step must generate one block of test code. 
-3. Do not modify, merge, skip, or add any step. 4. Use only appium-mcp-server API calls.
+3. Do not modify, merge, skip, or add any step. 
+4. Use only appium-mcp-server API calls.
+5. Analyze the execution result of each step to ensure success before proceeding to the next step.
 ```
 AI will call MCP tools to automatically generate corresponding step definition code.
 
