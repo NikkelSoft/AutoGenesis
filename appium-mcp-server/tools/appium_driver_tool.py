@@ -43,6 +43,16 @@ def get_appium_locator(locator_strategy_str: str, locator_value: str):
         "IOS_CLASS_CHAIN": AppiumBy.IOS_CLASS_CHAIN,
         "ANDROID_UIAUTOMATOR": AppiumBy.ANDROID_UIAUTOMATOR,
         "ANDROID_VIEWTAG": AppiumBy.ANDROID_VIEWTAG,
+        # Support lowercase formats
+        "accessibility_id": AppiumBy.ACCESSIBILITY_ID,
+        "name": AppiumBy.NAME,
+        "id": AppiumBy.ID,
+        "class_name": AppiumBy.CLASS_NAME,
+        "xpath": AppiumBy.XPATH,
+        "ios_predicate": AppiumBy.IOS_PREDICATE,
+        "ios_class_chain": AppiumBy.IOS_CLASS_CHAIN,
+        "android_uiautomator": AppiumBy.ANDROID_UIAUTOMATOR,
+        "android_viewtag": AppiumBy.ANDROID_VIEWTAG,
     }
 
     locator_strategy_str = locator_strategy_str.strip() if locator_strategy_str else ""
