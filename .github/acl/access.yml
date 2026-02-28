@@ -70,3 +70,5 @@ configuration:
     role: Read
   - member: v-yangkan
     role: Read
+  - member: v-shelzhang
+    role: Read
