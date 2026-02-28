@@ -86,3 +86,5 @@ configuration:
     role: Read
   - member: v-shelzhang
     role: Read
+  - member: v-huizhang
+    role: Read
