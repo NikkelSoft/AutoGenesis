@@ -70,3 +70,17 @@ configuration:
     role: Read
   - member: v-yangkan
     role: Read
+  - member: v-kaichen
+    role: Read
+  - member: v-wangxiaofe
+    role: Read
+  - member: v-suntao
+    role: Read
+  - member: v-bowenyao
+    role: Read
+  - member: v-zhaoyuxin
+    role: Read
+  - member: v-shuyichu
+    role: Read
+  - member: v-zhulu
+    role: Read
