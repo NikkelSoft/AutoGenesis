@@ -94,3 +94,5 @@ configuration:
     role: Read
   - member: v-shengnliu
     role: Read
+  - member: v-xianmyang
+    role: Read
