@@ -100,3 +100,5 @@ configuration:
     role: Read
   - member: v-siyudong
     role: Read
+  - member: v-chenchenji
+    role: Read
