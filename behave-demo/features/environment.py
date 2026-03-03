@@ -26,7 +26,7 @@ TRANSPORT = "stdio"  # Default transport method, can be changed to "sse" if need
 package = os.environ.get('PACKAGE', 'com.microsoft.emmx.canary')
 
 def load_mcp_config():
-    current_dir = pathlib.Path(__file__).parent.parent
+    current_dir = pathlib.Path(__file__).parent.parent.parent
     mcp_config_path = current_dir / ".vscode" / "mcp.json"
     
     if not mcp_config_path.exists():
