@@ -147,9 +147,12 @@ if lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null ; then
             echo -e "   ${GREEN}✅ Process stopped${NC}"
         fi
     else
-        echo -e "   ${YELLOW}Using different port...${NC}"
-        PORT=4724
-        echo -e "   ${BLUE}New port: $PORT${NC}"
+        echo -e "   ${RED}❌ Port $PORT is occupied${NC}"
+        echo -e "   ${YELLOW}Please stop the existing process manually:${NC}"
+        echo -e "   ${BLUE}1. Find process: lsof -i :$PORT${NC}"
+        echo -e "   ${BLUE}2. Kill process: kill -9 <PID>${NC}"
+        echo -e "   ${BLUE}Or use: pkill -f appium${NC}"
+        exit 1
     fi
 else
     echo -e "   ✅ ${GREEN}Port $PORT available${NC}"

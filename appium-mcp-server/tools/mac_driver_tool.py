@@ -172,7 +172,7 @@ async def click_element_macos(caller: str, locator_value: str, locator_strategy:
         except:
             resp["data"] = {"page_source": ""}
 
-    return format_tool_response(resp)
+    return json.dumps(format_tool_response(resp))
 
 
 def register_mac_driver_tools(mcp, driver_manager):
@@ -584,7 +584,7 @@ def register_mac_driver_tools(mcp, driver_manager):
             if len(elements_positions) < 2:
                 resp["status"] = "error" 
                 resp["error"] = f"Need at least 2 elements to verify order. Found: {len(elements_positions)} elements"
-                return format_tool_response(resp)
+                return json.dumps(format_tool_response(resp))
             
             # Sort elements by position based on direction
             if direction.lower() == "vertical":
@@ -596,7 +596,7 @@ def register_mac_driver_tools(mcp, driver_manager):
             else:
                 resp["status"] = "error"
                 resp["error"] = f"Invalid direction '{direction}'. Use 'vertical' or 'horizontal'"
-                return format_tool_response(resp)
+                return json.dumps(format_tool_response(resp))
             
             # Get actual order of elements based on their positions
             actual_order = [elem['index'] for elem in sorted_elements]
@@ -606,7 +606,7 @@ def register_mac_driver_tools(mcp, driver_manager):
                 if len(expected_orders) != len(element_xpaths):
                     resp["status"] = "error"
                     resp["error"] = f"expected_orders length ({len(expected_orders)}) must match element_xpaths length ({len(element_xpaths)})"
-                    return format_tool_response(resp)
+                    return json.dumps(format_tool_response(resp))
                 expected = expected_orders
             else:
                 expected = list(range(len(element_xpaths)))
