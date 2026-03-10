@@ -96,7 +96,7 @@ Create or edit `.vscode/mcp.json` in your project root:
     # Add MCP server configuration to .vscode/mcp.json:
     # {
     #   "servers": {
-    #     "pywinauto-mcp-sse": {
+    #     "auto-genesis-mcp-pywinauto-sse": {
     #       "url": "http://localhost:8000/sse"
     #     }
     #   }
@@ -108,7 +108,7 @@ Create or edit `.vscode/mcp.json` in your project root:
     # Add MCP server configuration to .vscode/mcp.json:
     # {
     #   "servers": {
-    #     "pywinauto-mcp-server-stdio": {
+    #     "auto-genesis-mcp-pywinauto-stdio": {
     #       "command": "uv",
     #       "args": [
     #         "run",
@@ -143,7 +143,7 @@ Configure MCP server in Cursor settings:
     # Add to Cursor MCP configuration:
     # {
     #   "mcpServers": {
-    #     "pywinauto-mcp-sse": {
+    #     "auto-genesis-mcp-pywinauto-sse": {
     #       "url": "http://localhost:8000/sse"
     #     }
     #   }
@@ -154,7 +154,7 @@ Configure MCP server in Cursor settings:
     # Add to Cursor MCP configuration:
     # {
     #   "mcpServers": {
-    #     "pywinauto-mcp-server-stdio": {
+    #     "auto-genesis-mcp-pywinauto-stdio": {
     #       "command": "uv",
     #       "args": [
     #         "run",
@@ -200,13 +200,13 @@ Feature: Edge Browser Testing
 
 #### 6.2 Generate Test Code
 
-Use the autoGenesis-run skill to automatically generate test code from your scenarios:
+Use the autoGenesis-win skill to automatically generate test code from your scenarios:
 
 This project includes a pre-configured skill that simplifies the test execution process. Simply provide your scenario name and steps in natural language:
 
 **Quick Example:**
 ```
-Use skill autoGenesis-run to execute scenario: Automate Notepad text editing workflow
+Use skill autoGenesis-win to execute scenario: Test msn.com website on Edge
 ```
 
 The skill will automatically:
@@ -217,7 +217,7 @@ The skill will automatically:
 - Generate BDD test code
 - Save the generated code to your project
 
-**For more examples and usage details, see:** [.github/skills/autoGenesis-run/](.github/skills/autoGenesis-run/)
+**For more examples and usage details, see:** [.github/skills/autoGenesis-win/](.github/skills/autoGenesis-win/)
 
 ### 7. Run Generated Test Code
 
