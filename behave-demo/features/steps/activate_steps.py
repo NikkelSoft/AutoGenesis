@@ -6,9 +6,19 @@ from behave import given, when, then
 from features.environment import call_tool_sync, get_tool_json
 
 
-@given("the BP Monitor and ECG Monitor are connected to the Device Interface")
-def step_bp_ecg_connected(context):
-    # Launch the simulator so the Device Interface has hardware to report.
+# Maps MMSS.APP device names (used in the Display Interface) to the
+# corresponding checkbox labels in the MMSS Patient Simulator.
+DEVICE_CHECKBOX_MAP = {
+    "ECG_MONITOR": "ECG Monitor",
+    "PULSE_OXIMETER": "Pulse Oximeter",
+    "BP_MONITOR": "BP Monitor",
+    "THERMAL_PROBE": "Thermal Probe",
+    "CAPNOMETER": "Capnometer",
+    "EEG_MONITOR": "EEG Monitor",
+}
+
+
+def _launch_simulator(context):
     result = call_tool_sync(
         context,
         context.sessions["sim"].call_tool(
@@ -16,7 +26,7 @@ def step_bp_ecg_connected(context):
             arguments={
                 "caller": "behave",
                 "scenario": context.scenario.name,
-                "step": "the BP Monitor and ECG Monitor are connected to the Device Interface",
+                "step": "configure simulator devices",
                 "need_snapshot": 0
             }
         ),
@@ -27,13 +37,79 @@ def step_bp_ecg_connected(context):
         f"Failed to launch MMSS Patient Simulator: {response}"
 
 
+def _set_checkbox(context, checkbox_name, desired_checked):
+    expected_state = "checked" if desired_checked else "unchecked"
+
+    result = call_tool_sync(
+        context,
+        context.sessions["sim"].call_tool(
+            name="verify_checkbox_state",
+            arguments={
+                "caller": "behave",
+                "control_framework": "pywinauto",
+                "name": checkbox_name,
+                "expected_state": expected_state,
+                "control_type": "CheckBox",
+                "need_snapshot": 0,
+                "timeout": 2
+            }
+        ),
+        session_name="sim"
+    )
+    response = get_tool_json(result)
+    if response is not None and response.get("status") == "success":
+        return  # already in the desired state
+
+    result = call_tool_sync(
+        context,
+        context.sessions["sim"].call_tool(
+            name="element_click",
+            arguments={
+                "caller": "behave",
+                "control_framework": "pywinauto",
+                "name": checkbox_name,
+                "control_type": "CheckBox",
+                "need_snapshot": 0
+            }
+        ),
+        session_name="sim"
+    )
+    response = get_tool_json(result)
+    assert response is not None and response.get("status") == "success", \
+        f"Failed to toggle checkbox '{checkbox_name}' to {expected_state}: {response}"
+
+
+def _configure_devices(context, connected_devices):
+    _launch_simulator(context)
+    for device_type, checkbox_name in DEVICE_CHECKBOX_MAP.items():
+        _set_checkbox(context, checkbox_name, device_type in connected_devices)
+
+
+@given("no devices are connected to the Device Interface")
+def step_no_devices_connected(context):
+    _configure_devices(context, set())
+
+
+@given("all devices are connected to the Device Interface")
+def step_all_devices_connected(context):
+    _configure_devices(context, set(DEVICE_CHECKBOX_MAP.keys()))
+
+
+@given("the following devices are connected to the Device Interface")
+def step_following_devices_connected(context):
+    connected = {row["device"] for row in context.table}
+    unknown = connected - set(DEVICE_CHECKBOX_MAP.keys())
+    assert not unknown, f"Unknown device(s) in table: {unknown}"
+    _configure_devices(context, connected)
+
+
 @when("the MMSS is activated via the OS API")
 def step_activate_via_os_api(context):
     context.activation_start_time = time.time()
 
     result = call_tool_sync(
         context,
-        context.session.call_tool(
+        context.sessions["mmss"].call_tool(
             name="app_launch",
             arguments={
                 "caller": "behave",
@@ -41,7 +117,8 @@ def step_activate_via_os_api(context):
                 "step": "the MMSS is activated via the OS API",
                 "need_snapshot": 0
             }
-        )
+        ),
+        session_name="mmss"
     )
     response = get_tool_json(result)
     assert response is not None and response.get("status") == "success", \
@@ -62,7 +139,7 @@ def step_device_status_on_display(context):
         while time.time() < deadline:
             result = call_tool_sync(
                 context,
-                context.session.call_tool(
+                context.sessions["mmss"].call_tool(
                     name="verify_element_exists",
                     arguments={
                         "caller": "behave",
@@ -72,7 +149,8 @@ def step_device_status_on_display(context):
                         "need_snapshot": 0,
                         "timeout": 2
                     }
-                )
+                ),
+                session_name="mmss"
             )
             response = get_tool_json(result)
             if response is not None and response.get("status") == "success":

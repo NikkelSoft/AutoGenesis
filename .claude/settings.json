@@ -6,7 +6,19 @@
       "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature -v 2>&1)",
       "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature -v 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape\")",
       "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature -v 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:\")",
-      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:|INFO -\")"
+      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:|INFO -\")",
+      "Bash(git -C C:/Temp/AutoGenesis remote -v)",
+      "Bash(git -C C:/Temp/AutoGenesis status --short)",
+      "Bash(git -C C:/Temp/AutoGenesis status)",
+      "Bash(git -C C:/Temp/AutoGenesis log -1 --oneline)",
+      "PowerShell(gh auth status 2>&1)",
+      "Bash(git -C C:/Temp/AutoGenesisFork remote -v)",
+      "Bash(git -C C:/Temp/AutoGenesis diff .claude/settings.json)",
+      "Bash(git -C C:/Temp/AutoGenesis log origin/main..HEAD --oneline)",
+      "Bash(git -C C:/Temp/AutoGenesis remote rename origin upstream)",
+      "Bash(git -C C:/Temp/AutoGenesis remote add origin https://github.com/NikkelSoft/AutoGenesis.git)",
+      "Bash(git -C C:/Temp/AutoGenesis push -u origin main)",
+      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:|INFO -\" | Select-Object -Last 60)"
     ],
     "additionalDirectories": [
       "C:\\Temp\\MMSS.Demo\\.vscode",
