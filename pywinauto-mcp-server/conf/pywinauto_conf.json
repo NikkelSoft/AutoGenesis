@@ -1,10 +1,13 @@
 {
     "PYWINAUTO_CONFIG": {
         "apps_config": {
-            "# app name": {
-                "exe": "# app exe path",
-                "window_title_re": "# window title regex",
-                "launch_args": ["# app launch arguments, e.g. --remote-debugging-port for edge"]
+            "MMSS.APP": {
+                "exe": "C:\\Temp\\MMSS.Demo\\MMSS.APP\\bin\\Debug\\net8.0-windows7.0\\MMSS.APP.exe",
+                "window_title_re": "MMSS Application"
+            },
+            "MMSS.SIM": {
+                "exe": "C:\\Temp\\MMSS.Demo\\MMSS.SIM\\bin\\Debug\\net8.0-windows7.0\\MMSS.SIM.exe",
+                "window_title_re": "MMSS Patient Simulator"
             }
         }
     }

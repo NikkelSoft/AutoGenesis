@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature -v 2>&1)",
+      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature -v 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape\")",
+      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature -v 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:\")",
+      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:|INFO -\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Temp\\MMSS.Demo\\.vscode",
+      "C:\\Temp\\MMSS.Demo"
+    ]
+  }
+}
