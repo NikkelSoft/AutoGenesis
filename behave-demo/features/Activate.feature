@@ -3,12 +3,12 @@ Feature: Activate
     As a clinician I want to retrieve real-time vital signs and alerts with the MMSS
     So that I can track the patient's vital signs continuously and respond to changes immediately
 
-Rule: The MMSS shall be activated within 10 seconds
+Rule: The MMSS shall be activated within 2 seconds
 
 Scenario: No devices connected shows every device as INACTIVE
     Given no devices are connected to the Device Interface
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
     | PULSE_OXIMETER | INACTIVE      |
@@ -22,7 +22,7 @@ Scenario: Only ECG Monitor connected
     | device      |
     | ECG_MONITOR |
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | ACTIVE        |
     | PULSE_OXIMETER | INACTIVE      |
@@ -36,7 +36,7 @@ Scenario: Only BP Monitor connected
     | device     |
     | BP_MONITOR |
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
     | PULSE_OXIMETER | INACTIVE      |
@@ -50,7 +50,7 @@ Scenario: Only Pulse Oximeter connected
     | device         |
     | PULSE_OXIMETER |
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
     | PULSE_OXIMETER | ACTIVE        |
@@ -64,7 +64,7 @@ Scenario: Only Thermal Probe connected
     | device        |
     | THERMAL_PROBE |
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
     | PULSE_OXIMETER | INACTIVE      |
@@ -78,7 +78,7 @@ Scenario: Only Capnometer connected
     | device     |
     | CAPNOMETER |
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
     | PULSE_OXIMETER | INACTIVE      |
@@ -92,7 +92,7 @@ Scenario: Only EEG Monitor connected
     | device      |
     | EEG_MONITOR |
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
     | PULSE_OXIMETER | INACTIVE      |
@@ -107,7 +107,7 @@ Scenario: BP Monitor and ECG Monitor connected
     | BP_MONITOR  |
     | ECG_MONITOR |
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | ACTIVE        |
     | PULSE_OXIMETER | INACTIVE      |
@@ -119,7 +119,7 @@ Scenario: BP Monitor and ECG Monitor connected
 Scenario: All devices connected
     Given all devices are connected to the Device Interface
     When the MMSS is activated via the OS API
-    Then the device status is available on the Display Interface within 10 seconds
+    Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | ACTIVE        |
     | PULSE_OXIMETER | ACTIVE        |

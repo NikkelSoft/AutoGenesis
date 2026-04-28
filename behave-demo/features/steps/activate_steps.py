@@ -125,9 +125,9 @@ def step_activate_via_os_api(context):
         f"Failed to launch MMSS Application: {response}"
 
 
-@then("the device status is available on the Display Interface within 10 seconds")
+@then("the device status is available on the Display Interface within 2 seconds")
 def step_device_status_on_display(context):
-    deadline = context.activation_start_time + 10
+    deadline = context.activation_start_time + 2
     failed_devices = []
 
     for row in context.table:
@@ -165,4 +165,4 @@ def step_device_status_on_display(context):
             )
 
     assert not failed_devices, \
-        f"Device statuses not shown within 10s on Display Interface: {failed_devices}"
+        f"Device statuses not shown within 2s on Display Interface: {failed_devices}"

@@ -18,7 +18,12 @@
       "Bash(git -C C:/Temp/AutoGenesis remote rename origin upstream)",
       "Bash(git -C C:/Temp/AutoGenesis remote add origin https://github.com/NikkelSoft/AutoGenesis.git)",
       "Bash(git -C C:/Temp/AutoGenesis push -u origin main)",
-      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:|INFO -\" | Select-Object -Last 60)"
+      "PowerShell($env:Path = \"C:\\\\Users\\\\310283426\\\\.local\\\\bin;$env:Path\"; $env:PYTHONUTF8 = \"1\"; cd C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; uv run behave features/Activate.feature 2>&1 | Select-String -NotMatch \"warning:|VIRTUAL_ENV|SyntaxWarning|re.compile|invalid escape|Tool Call|Processing request|tool_call|Result:|Parameters:|INFO -\" | Select-Object -Last 60)",
+      "PowerShell($env:PYTHONUTF8 = \"1\"; uv run behave behave-demo/features/Activate.feature)",
+      "PowerShell(Set-Location C:\\\\Temp\\\\AutoGenesis\\\\behave-demo; $env:PYTHONUTF8 = \"1\"; uv run behave features/Activate.feature)",
+      "PowerShell($env:PYTHONUTF8 = \"1\"; uv run --directory C:\\\\Temp\\\\AutoGenesis\\\\behave-demo behave features/Activate.feature)",
+      "Read(//c/Users/310283426/.vscode/extensions/**)",
+      "Bash(node -e \"const p = require\\('C:/Users/310283426/.vscode/extensions/jimasp.behave-vsc-0.6.4/package.json'\\); const props = p.contributes?.configuration?.properties || p.contributes?.configuration?.[0]?.properties; console.log\\(Object.keys\\(props||{}\\).join\\('\\\\n'\\)\\)\")"
     ],
     "additionalDirectories": [
       "C:\\Temp\\MMSS.Demo\\.vscode",
