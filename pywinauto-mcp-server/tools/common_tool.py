@@ -139,8 +139,9 @@ def register_common_tools(mcp, app_manager):
         scenario: str = "", 
         step_raw: str = "", 
         step: str = "",
-        timeout: int = 5, 
-        need_snapshot: int = 1) -> str:
+        timeout: int = 5,
+        need_snapshot: int = 1,
+        wait_after: float = 2.0) -> str:
         """
         Clicks on a native button element in the app UI.
         
@@ -196,7 +197,8 @@ def register_common_tools(mcp, app_manager):
                         btn.double_click_input()
                     else:
                         raise ValueError(f"Unsupported click_count: {click_count}. Supported values are 1 and 2.")
-                    await asyncio.sleep(2)
+                    if wait_after > 0:
+                        await asyncio.sleep(wait_after)
                     resp["status"] = "success"
                 else:
                     resp["status"] = "failed"

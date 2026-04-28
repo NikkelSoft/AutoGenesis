@@ -69,7 +69,8 @@ def _set_checkbox(context, checkbox_name, desired_checked):
                 "control_framework": "pywinauto",
                 "name": checkbox_name,
                 "control_type": "CheckBox",
-                "need_snapshot": 0
+                "need_snapshot": 0,
+                "wait_after": 0.2
             }
         ),
         session_name="sim"
@@ -109,6 +110,28 @@ def step_mmss_is_running(context):
         f"Failed to launch MMSS Application: {response}"
 
 
+@when("the MMSS is activated on the OS API")
+def step_mmss_activated_on_os_api(context):
+    context.activation_start_time = time.time()
+    result = call_tool_sync(
+        context,
+        context.sessions["mmss"].call_tool(
+            name="app_launch",
+            arguments={
+                "caller": "behave",
+                "scenario": context.scenario.name,
+                "step": "the MMSS is activated on the OS API",
+                "kill_existing": 1,
+                "need_snapshot": 0
+            }
+        ),
+        session_name="mmss"
+    )
+    response = get_tool_json(result)
+    assert response is not None and response.get("status") == "success", \
+        f"Failed to activate MMSS Application: {response}"
+
+
 @step("no devices are enabled in the simulator")
 def step_no_devices_enabled(context):
     _configure_devices(context, set())
@@ -123,15 +146,16 @@ def step_device_enabled(context, device):
     context.activation_start_time = time.time()
 
 
-@then("the device status is available on the Display Interface within 2 seconds")
-def step_device_status_on_display(context):
-    deadline = context.activation_start_time + 2
+@then("the device status is available on the Display Interface within {seconds:d} seconds")
+def step_device_status_on_display(context, seconds):
+    deadline = context.activation_start_time + seconds
     failed_devices = []
 
     for row in context.table:
         device_type = row["device type"]
         expected_status = row["device status"]
-        expected_name = f"● {device_type}: {expected_status}"
+        toggle = "●" if expected_status == "ACTIVE" else "○"
+        expected_name = f"{toggle} {device_type}: {expected_status}"
 
         found = False
         while time.time() < deadline:
@@ -163,4 +187,4 @@ def step_device_status_on_display(context):
             )
 
     assert not failed_devices, \
-        f"Device statuses not shown within 2s on Display Interface: {failed_devices}"
+        f"Device statuses not shown within {seconds}s on Display Interface: {failed_devices}"
