@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 
 import time
-from behave import given, when, then
+from behave import given, when, then, step
 from features.environment import call_tool_sync, get_tool_json
 
 
@@ -18,7 +18,7 @@ DEVICE_CHECKBOX_MAP = {
 }
 
 
-def _launch_simulator(context):
+def _launch_simulator(context, step_label):
     result = call_tool_sync(
         context,
         context.sessions["sim"].call_tool(
@@ -26,7 +26,7 @@ def _launch_simulator(context):
             arguments={
                 "caller": "behave",
                 "scenario": context.scenario.name,
-                "step": "configure simulator devices",
+                "step": step_label,
                 "need_snapshot": 0
             }
         ),
@@ -80,33 +80,17 @@ def _set_checkbox(context, checkbox_name, desired_checked):
 
 
 def _configure_devices(context, connected_devices):
-    _launch_simulator(context)
     for device_type, checkbox_name in DEVICE_CHECKBOX_MAP.items():
         _set_checkbox(context, checkbox_name, device_type in connected_devices)
 
 
-@given("no devices are connected to the Device Interface")
-def step_no_devices_connected(context):
-    _configure_devices(context, set())
+@given("the simulator is running")
+def step_simulator_is_running(context):
+    _launch_simulator(context, "the simulator is running")
 
 
-@given("all devices are connected to the Device Interface")
-def step_all_devices_connected(context):
-    _configure_devices(context, set(DEVICE_CHECKBOX_MAP.keys()))
-
-
-@given("the following devices are connected to the Device Interface")
-def step_following_devices_connected(context):
-    connected = {row["device"] for row in context.table}
-    unknown = connected - set(DEVICE_CHECKBOX_MAP.keys())
-    assert not unknown, f"Unknown device(s) in table: {unknown}"
-    _configure_devices(context, connected)
-
-
-@when("the MMSS is activated via the OS API")
-def step_activate_via_os_api(context):
-    context.activation_start_time = time.time()
-
+@given("the MMSS is running")
+def step_mmss_is_running(context):
     result = call_tool_sync(
         context,
         context.sessions["mmss"].call_tool(
@@ -114,7 +98,7 @@ def step_activate_via_os_api(context):
             arguments={
                 "caller": "behave",
                 "scenario": context.scenario.name,
-                "step": "the MMSS is activated via the OS API",
+                "step": "the MMSS is running",
                 "need_snapshot": 0
             }
         ),
@@ -123,6 +107,20 @@ def step_activate_via_os_api(context):
     response = get_tool_json(result)
     assert response is not None and response.get("status") == "success", \
         f"Failed to launch MMSS Application: {response}"
+
+
+@step("no devices are enabled in the simulator")
+def step_no_devices_enabled(context):
+    _configure_devices(context, set())
+    context.activation_start_time = time.time()
+
+
+@step("the {device} is enabled in the simulator")
+def step_device_enabled(context, device):
+    assert device in DEVICE_CHECKBOX_MAP, \
+        f"Unknown device '{device}'. Known: {sorted(DEVICE_CHECKBOX_MAP.keys())}"
+    _set_checkbox(context, DEVICE_CHECKBOX_MAP[device], True)
+    context.activation_start_time = time.time()
 
 
 @then("the device status is available on the Display Interface within 2 seconds")

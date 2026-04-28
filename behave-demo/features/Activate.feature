@@ -3,11 +3,12 @@ Feature: Activate
     As a clinician I want to retrieve real-time vital signs and alerts with the MMSS
     So that I can track the patient's vital signs continuously and respond to changes immediately
 
-Rule: The MMSS shall be activated within 2 seconds
+Rule: The MMSS shall reflect device state changes within 2 seconds
 
 Scenario: No devices connected shows every device as INACTIVE
-    Given no devices are connected to the Device Interface
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    When no devices are enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
@@ -18,10 +19,10 @@ Scenario: No devices connected shows every device as INACTIVE
     | EEG_MONITOR    | INACTIVE      |
 
 Scenario: Only ECG Monitor connected
-    Given the following devices are connected to the Device Interface
-    | device      |
-    | ECG_MONITOR |
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the ECG_MONITOR is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | ACTIVE        |
@@ -32,10 +33,10 @@ Scenario: Only ECG Monitor connected
     | EEG_MONITOR    | INACTIVE      |
 
 Scenario: Only BP Monitor connected
-    Given the following devices are connected to the Device Interface
-    | device     |
-    | BP_MONITOR |
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the BP_MONITOR is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
@@ -46,10 +47,10 @@ Scenario: Only BP Monitor connected
     | EEG_MONITOR    | INACTIVE      |
 
 Scenario: Only Pulse Oximeter connected
-    Given the following devices are connected to the Device Interface
-    | device         |
-    | PULSE_OXIMETER |
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the PULSE_OXIMETER is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
@@ -60,10 +61,10 @@ Scenario: Only Pulse Oximeter connected
     | EEG_MONITOR    | INACTIVE      |
 
 Scenario: Only Thermal Probe connected
-    Given the following devices are connected to the Device Interface
-    | device        |
-    | THERMAL_PROBE |
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the THERMAL_PROBE is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
@@ -74,10 +75,10 @@ Scenario: Only Thermal Probe connected
     | EEG_MONITOR    | INACTIVE      |
 
 Scenario: Only Capnometer connected
-    Given the following devices are connected to the Device Interface
-    | device     |
-    | CAPNOMETER |
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the CAPNOMETER is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
@@ -88,10 +89,10 @@ Scenario: Only Capnometer connected
     | EEG_MONITOR    | INACTIVE      |
 
 Scenario: Only EEG Monitor connected
-    Given the following devices are connected to the Device Interface
-    | device      |
-    | EEG_MONITOR |
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the EEG_MONITOR is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | INACTIVE      |
@@ -102,11 +103,11 @@ Scenario: Only EEG Monitor connected
     | EEG_MONITOR    | ACTIVE        |
 
 Scenario: BP Monitor and ECG Monitor connected
-    Given the following devices are connected to the Device Interface
-    | device      |
-    | BP_MONITOR  |
-    | ECG_MONITOR |
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the BP_MONITOR is enabled in the simulator
+    And the ECG_MONITOR is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | ACTIVE        |
@@ -117,8 +118,15 @@ Scenario: BP Monitor and ECG Monitor connected
     | EEG_MONITOR    | INACTIVE      |
 
 Scenario: All devices connected
-    Given all devices are connected to the Device Interface
-    When the MMSS is activated via the OS API
+    Given the MMSS is running
+    And the simulator is running
+    And no devices are enabled in the simulator
+    When the ECG_MONITOR is enabled in the simulator
+    And the PULSE_OXIMETER is enabled in the simulator
+    And the BP_MONITOR is enabled in the simulator
+    And the THERMAL_PROBE is enabled in the simulator
+    And the CAPNOMETER is enabled in the simulator
+    And the EEG_MONITOR is enabled in the simulator
     Then the device status is available on the Display Interface within 2 seconds
     | device type    | device status |
     | ECG_MONITOR    | ACTIVE        |
