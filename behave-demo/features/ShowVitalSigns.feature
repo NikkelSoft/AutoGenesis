@@ -5,74 +5,74 @@ Feature: Show Vital Signs
 
 Rule: The MMSS shall show the vital sign on the Monitor Display within 5 second after connecting the sensor correctly
 
-Scenario: Show vital signs from ECG Monitor on Monitor Display
+Scenario: Show vital signs from ECG Electrodes on Monitor Display
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the ECG_MONITOR is enabled in the simulator
+    When the ECG Electrodes are connected in the simulator
     Then the following vital signs are visible on the Display Interface within 10 seconds
     | vital sign |
     | Heart Rate |
 
-Scenario: Show vital signs from BP Monitor on Monitor Display
+Scenario: Show vital signs from NIBP Cuff on Monitor Display
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the BP_MONITOR is enabled in the simulator
+    When the NIBP Cuff is connected in the simulator
     Then the following vital signs are visible on the Display Interface within 10 seconds
     | vital sign   |
     | Systolic BP  |
     | Diastolic BP |
     | MAP          |
 
-Scenario: Show vital signs from Pulse Oximeter on Monitor Display
+Scenario: Show vital signs from SpO₂ Probe on Monitor Display
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the PULSE_OXIMETER is enabled in the simulator
+    When the SpO₂ Probe is connected in the simulator
     Then the following vital signs are visible on the Display Interface within 10 seconds
     | vital sign |
     | SpO2       |
     | Pulse Rate |
 
-Scenario: Show vital signs from Capnometer on Monitor Display
+Scenario: Show vital signs from EtCO₂ Sampling Line on Monitor Display
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the CAPNOMETER is enabled in the simulator
+    When the EtCO₂ Sampling Line is connected in the simulator
     Then the following vital signs are visible on the Display Interface within 10 seconds
     | vital sign       |
     | Respiratory Rate |
     | EtCO2            |
 
-Scenario: Show vital signs from Thermal Probe on Monitor Display
+Scenario: Show vital signs from Temperature Probe on Monitor Display
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the THERMAL_PROBE is enabled in the simulator
+    When the Temperature Probe is connected in the simulator
     Then the following vital signs are visible on the Display Interface within 10 seconds
     | vital sign  |
     | Temperature |
 
-Scenario: Show vital signs from EEG Monitor on Monitor Display
+Scenario: Show vital signs from EEG Electrodes on Monitor Display
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the EEG_MONITOR is enabled in the simulator
+    When the EEG Electrodes are connected in the simulator
     Then the following vital signs are visible on the Display Interface within 10 seconds
     | vital sign |
     | BIS        |
 
-Scenario: Show all vital signs when all devices are connected
+Scenario: Show all vital signs when all sensors are connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the ECG_MONITOR is enabled in the simulator
-    And the BP_MONITOR is enabled in the simulator
-    And the PULSE_OXIMETER is enabled in the simulator
-    And the CAPNOMETER is enabled in the simulator
-    And the THERMAL_PROBE is enabled in the simulator
-    And the EEG_MONITOR is enabled in the simulator
+    When the ECG Electrodes are connected in the simulator
+    And the NIBP Cuff is connected in the simulator
+    And the SpO₂ Probe is connected in the simulator
+    And the EtCO₂ Sampling Line is connected in the simulator
+    And the Temperature Probe is connected in the simulator
+    And the EEG Electrodes are connected in the simulator
     Then the following vital signs are visible on the Display Interface within 10 seconds
     | vital sign       |
     | Heart Rate       |

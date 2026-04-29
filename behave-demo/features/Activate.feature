@@ -3,120 +3,121 @@ Feature: Activate
     As a clinician I want to retrieve real-time vital signs and alerts with the MMSS
     So that I can track the patient's vital signs continuously and respond to changes immediately
 
-Rule: The MMSS shall reflect device state changes within 3 seconds
+Rule: The MMSS shall reflect patient-interface (sensor) connection state changes within 3 seconds
+Rule: The MMSS sensor-status overview shall identify each sensor by its clinician-facing label
 
-Scenario: No devices connected shows every device as INACTIVE
+Scenario: No sensors connected shows every sensor as DISCONNECTED
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     When the MMSS is activated on the OS API
-    Then the device status is available on the Display Interface within 5 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | INACTIVE      |
-    | PULSE_OXIMETER | INACTIVE      |
-    | BP_MONITOR     | INACTIVE      |
-    | THERMAL_PROBE  | INACTIVE      |
-    | CAPNOMETER     | INACTIVE      |
-    | EEG_MONITOR    | INACTIVE      |
+    Then the sensor status is available on the Display Interface within 5 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | DISCONNECTED  |
+    | PULSE_OXIMETER | SpO₂ Probe           | DISCONNECTED  |
+    | BP_MONITOR     | NIBP Cuff            | DISCONNECTED  |
+    | THERMAL_PROBE  | Temperature Probe    | DISCONNECTED  |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | DISCONNECTED  |
+    | EEG_MONITOR    | EEG Electrodes       | DISCONNECTED  |
 
-Scenario: Only ECG Monitor connected
+Scenario: Only ECG Electrodes connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the ECG_MONITOR is enabled in the simulator
-    Then the device status is available on the Display Interface within 3 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | ACTIVE        |
-    | PULSE_OXIMETER | INACTIVE      |
-    | BP_MONITOR     | INACTIVE      |
-    | THERMAL_PROBE  | INACTIVE      |
-    | CAPNOMETER     | INACTIVE      |
-    | EEG_MONITOR    | INACTIVE      |
+    When the ECG Electrodes are connected in the simulator
+    Then the sensor status is available on the Display Interface within 3 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | CONNECTED     |
+    | PULSE_OXIMETER | SpO₂ Probe           | DISCONNECTED  |
+    | BP_MONITOR     | NIBP Cuff            | DISCONNECTED  |
+    | THERMAL_PROBE  | Temperature Probe    | DISCONNECTED  |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | DISCONNECTED  |
+    | EEG_MONITOR    | EEG Electrodes       | DISCONNECTED  |
 
-Scenario: Only BP Monitor connected
+Scenario: Only NIBP Cuff connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the BP_MONITOR is enabled in the simulator
-    Then the device status is available on the Display Interface within 3 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | INACTIVE      |
-    | PULSE_OXIMETER | INACTIVE      |
-    | BP_MONITOR     | ACTIVE        |
-    | THERMAL_PROBE  | INACTIVE      |
-    | CAPNOMETER     | INACTIVE      |
-    | EEG_MONITOR    | INACTIVE      |
+    When the NIBP Cuff is connected in the simulator
+    Then the sensor status is available on the Display Interface within 3 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | DISCONNECTED  |
+    | PULSE_OXIMETER | SpO₂ Probe           | DISCONNECTED  |
+    | BP_MONITOR     | NIBP Cuff            | CONNECTED     |
+    | THERMAL_PROBE  | Temperature Probe    | DISCONNECTED  |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | DISCONNECTED  |
+    | EEG_MONITOR    | EEG Electrodes       | DISCONNECTED  |
 
-Scenario: Only Pulse Oximeter connected
+Scenario: Only SpO₂ Probe connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the PULSE_OXIMETER is enabled in the simulator
-    Then the device status is available on the Display Interface within 3 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | INACTIVE      |
-    | PULSE_OXIMETER | ACTIVE        |
-    | BP_MONITOR     | INACTIVE      |
-    | THERMAL_PROBE  | INACTIVE      |
-    | CAPNOMETER     | INACTIVE      |
-    | EEG_MONITOR    | INACTIVE      |
+    When the SpO₂ Probe is connected in the simulator
+    Then the sensor status is available on the Display Interface within 3 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | DISCONNECTED  |
+    | PULSE_OXIMETER | SpO₂ Probe           | CONNECTED     |
+    | BP_MONITOR     | NIBP Cuff            | DISCONNECTED  |
+    | THERMAL_PROBE  | Temperature Probe    | DISCONNECTED  |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | DISCONNECTED  |
+    | EEG_MONITOR    | EEG Electrodes       | DISCONNECTED  |
 
-Scenario: Only Thermal Probe connected
+Scenario: Only Temperature Probe connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the THERMAL_PROBE is enabled in the simulator
-    Then the device status is available on the Display Interface within 3 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | INACTIVE      |
-    | PULSE_OXIMETER | INACTIVE      |
-    | BP_MONITOR     | INACTIVE      |
-    | THERMAL_PROBE  | ACTIVE        |
-    | CAPNOMETER     | INACTIVE      |
-    | EEG_MONITOR    | INACTIVE      |
+    When the Temperature Probe is connected in the simulator
+    Then the sensor status is available on the Display Interface within 3 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | DISCONNECTED  |
+    | PULSE_OXIMETER | SpO₂ Probe           | DISCONNECTED  |
+    | BP_MONITOR     | NIBP Cuff            | DISCONNECTED  |
+    | THERMAL_PROBE  | Temperature Probe    | CONNECTED     |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | DISCONNECTED  |
+    | EEG_MONITOR    | EEG Electrodes       | DISCONNECTED  |
 
-Scenario: Only Capnometer connected
+Scenario: Only EtCO₂ Sampling Line connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the CAPNOMETER is enabled in the simulator
-    Then the device status is available on the Display Interface within 3 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | INACTIVE      |
-    | PULSE_OXIMETER | INACTIVE      |
-    | BP_MONITOR     | INACTIVE      |
-    | THERMAL_PROBE  | INACTIVE      |
-    | CAPNOMETER     | ACTIVE        |
-    | EEG_MONITOR    | INACTIVE      |
+    When the EtCO₂ Sampling Line is connected in the simulator
+    Then the sensor status is available on the Display Interface within 3 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | DISCONNECTED  |
+    | PULSE_OXIMETER | SpO₂ Probe           | DISCONNECTED  |
+    | BP_MONITOR     | NIBP Cuff            | DISCONNECTED  |
+    | THERMAL_PROBE  | Temperature Probe    | DISCONNECTED  |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | CONNECTED     |
+    | EEG_MONITOR    | EEG Electrodes       | DISCONNECTED  |
 
-Scenario: Only EEG Monitor connected
+Scenario: Only EEG Electrodes connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the EEG_MONITOR is enabled in the simulator
-    Then the device status is available on the Display Interface within 3 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | INACTIVE      |
-    | PULSE_OXIMETER | INACTIVE      |
-    | BP_MONITOR     | INACTIVE      |
-    | THERMAL_PROBE  | INACTIVE      |
-    | CAPNOMETER     | INACTIVE      |
-    | EEG_MONITOR    | ACTIVE        |
+    When the EEG Electrodes are connected in the simulator
+    Then the sensor status is available on the Display Interface within 3 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | DISCONNECTED  |
+    | PULSE_OXIMETER | SpO₂ Probe           | DISCONNECTED  |
+    | BP_MONITOR     | NIBP Cuff            | DISCONNECTED  |
+    | THERMAL_PROBE  | Temperature Probe    | DISCONNECTED  |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | DISCONNECTED  |
+    | EEG_MONITOR    | EEG Electrodes       | CONNECTED     |
 
-Scenario: All devices connected
+Scenario: All sensors connected
     Given the simulator is running
-    And no devices are enabled in the simulator
+    And no sensors are connected in the simulator
     And the MMSS is running
-    When the ECG_MONITOR is enabled in the simulator
-    And the PULSE_OXIMETER is enabled in the simulator
-    And the BP_MONITOR is enabled in the simulator
-    And the THERMAL_PROBE is enabled in the simulator
-    And the CAPNOMETER is enabled in the simulator
-    And the EEG_MONITOR is enabled in the simulator
-    Then the device status is available on the Display Interface within 3 seconds
-    | device type    | device status |
-    | ECG_MONITOR    | ACTIVE        |
-    | PULSE_OXIMETER | ACTIVE        |
-    | BP_MONITOR     | ACTIVE        |
-    | THERMAL_PROBE  | ACTIVE        |
-    | CAPNOMETER     | ACTIVE        |
-    | EEG_MONITOR    | ACTIVE        |
+    When the ECG Electrodes are connected in the simulator
+    And the SpO₂ Probe is connected in the simulator
+    And the NIBP Cuff is connected in the simulator
+    And the Temperature Probe is connected in the simulator
+    And the EtCO₂ Sampling Line is connected in the simulator
+    And the EEG Electrodes are connected in the simulator
+    Then the sensor status is available on the Display Interface within 3 seconds
+    | device type    | sensor label         | sensor status |
+    | ECG_MONITOR    | ECG Electrodes       | CONNECTED     |
+    | PULSE_OXIMETER | SpO₂ Probe           | CONNECTED     |
+    | BP_MONITOR     | NIBP Cuff            | CONNECTED     |
+    | THERMAL_PROBE  | Temperature Probe    | CONNECTED     |
+    | CAPNOMETER     | EtCO₂ Sampling Line  | CONNECTED     |
+    | EEG_MONITOR    | EEG Electrodes       | CONNECTED     |

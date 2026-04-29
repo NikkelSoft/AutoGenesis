@@ -6,15 +6,15 @@ from behave import given, when, then, step
 from features.environment import call_tool_sync, get_tool_json
 
 
-# Maps MMSS.APP device names (used in the Display Interface) to the
-# corresponding checkbox labels in the MMSS Patient Simulator.
-DEVICE_CHECKBOX_MAP = {
-    "ECG_MONITOR": "ECG Monitor",
-    "PULSE_OXIMETER": "Pulse Oximeter",
-    "BP_MONITOR": "BP Monitor",
-    "THERMAL_PROBE": "Thermal Probe",
-    "CAPNOMETER": "Capnometer",
-    "EEG_MONITOR": "EEG Monitor",
+# Sensor (patient interface) checkbox labels in the MMSS Patient Simulator.
+# Each label matches the CheckBox text exactly so it can be addressed by name.
+SENSOR_CHECKBOXES = {
+    "ECG Electrodes",
+    "NIBP Cuff",
+    "SpO₂ Probe",
+    "Temperature Probe",
+    "EtCO₂ Sampling Line",
+    "EEG Electrodes",
 }
 
 
@@ -80,9 +80,9 @@ def _set_checkbox(context, checkbox_name, desired_checked):
         f"Failed to toggle checkbox '{checkbox_name}' to {expected_state}: {response}"
 
 
-def _configure_devices(context, connected_devices):
-    for device_type, checkbox_name in DEVICE_CHECKBOX_MAP.items():
-        _set_checkbox(context, checkbox_name, device_type in connected_devices)
+def _set_all_sensors(context, connected_sensors):
+    for sensor in SENSOR_CHECKBOXES:
+        _set_checkbox(context, sensor, sensor in connected_sensors)
 
 
 @given("the simulator is running")
@@ -132,30 +132,33 @@ def step_mmss_activated_on_os_api(context):
         f"Failed to activate MMSS Application: {response}"
 
 
-@step("no devices are enabled in the simulator")
-def step_no_devices_enabled(context):
-    _configure_devices(context, set())
+@step("no sensors are connected in the simulator")
+def step_no_sensors_connected(context):
+    _set_all_sensors(context, set())
     context.activation_start_time = time.time()
 
 
-@step("the {device} is enabled in the simulator")
-def step_device_enabled(context, device):
-    assert device in DEVICE_CHECKBOX_MAP, \
-        f"Unknown device '{device}'. Known: {sorted(DEVICE_CHECKBOX_MAP.keys())}"
-    _set_checkbox(context, DEVICE_CHECKBOX_MAP[device], True)
+# Two phrasings: singular "is" and plural "are" — Behave registers the same
+# function under both patterns so the feature file reads naturally.
+@step("the {sensor} is connected in the simulator")
+@step("the {sensor} are connected in the simulator")
+def step_sensor_connected(context, sensor):
+    assert sensor in SENSOR_CHECKBOXES, \
+        f"Unknown sensor '{sensor}'. Known: {sorted(SENSOR_CHECKBOXES)}"
+    _set_checkbox(context, sensor, True)
     context.activation_start_time = time.time()
 
 
-@then("the device status is available on the Display Interface within {seconds:d} seconds")
-def step_device_status_on_display(context, seconds):
+@then("the sensor status is available on the Display Interface within {seconds:d} seconds")
+def step_sensor_status_on_display(context, seconds):
     deadline = context.activation_start_time + seconds
-    failed_devices = []
+    failed_sensors = []
 
     for row in context.table:
-        device_type = row["device type"]
-        expected_status = row["device status"]
-        toggle = "●" if expected_status == "ACTIVE" else "○"
-        expected_name = f"{toggle} {device_type}: {expected_status}"
+        sensor_label = row["sensor label"]
+        expected_status = row["sensor status"]
+        toggle = "●" if expected_status == "CONNECTED" else "○"
+        expected_name = f"{toggle} {sensor_label}: {expected_status}"
 
         found = False
         while time.time() < deadline:
@@ -169,7 +172,7 @@ def step_device_status_on_display(context, seconds):
                         "name": expected_name,
                         "control_type": "ListItem",
                         "need_snapshot": 0,
-                        "timeout": 2
+                        "timeout": 1
                     }
                 ),
                 session_name="mmss"
@@ -182,9 +185,9 @@ def step_device_status_on_display(context, seconds):
 
         if not found:
             elapsed = time.time() - context.activation_start_time
-            failed_devices.append(
-                f"{device_type}={expected_status} (elapsed: {elapsed:.1f}s)"
+            failed_sensors.append(
+                f"{sensor_label}={expected_status} (elapsed: {elapsed:.1f}s)"
             )
 
-    assert not failed_devices, \
-        f"Device statuses not shown within {seconds}s on Display Interface: {failed_devices}"
+    assert not failed_sensors, \
+        f"Sensor statuses not shown within {seconds}s on Display Interface: {failed_sensors}"
